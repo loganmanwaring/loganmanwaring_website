@@ -1,0 +1,268 @@
+header {
+    position: relative;
+    /* Any other styling you already have */
+  }
+
+/* Make header full-screen and stylish */
+header.masthead {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 60vh; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+/* Style the "Back to Main Page" link as a button */
+.back-to-main {
+    position: absolute;
+    top: 20px; /* Adjust to position it vertically */
+    left: 20px; /* Adjust to position it horizontally */
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 10; /* Ensure it is above other elements */
+}
+
+/* Hover effect for the button */
+.back-to-main:hover {
+    background-color: #ff6347; /* Change background on hover */
+    color: white;
+}
+
+.pong-link {
+    position: absolute;
+    top: 20px; /* Same vertical position as the other button */
+    right: 20px; /* Position it on the right side */
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+/* Hover effect to match the main page button */
+.pong-link:hover {
+    background-color: #ff6347;
+    color: white;
+}
+
+
+/* Optional overlay for better text contrast */
+header.masthead::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5); /* dark overlay */
+    z-index: 1;
+}
+
+.site-heading {
+    position: relative;
+    z-index: 2;
+}
+
+.site-heading h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Georgia', serif;
+}
+
+.site-heading .subheading {
+    font-size: 1.25rem;
+    font-style: italic;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Global styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f2f7f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Section headers styling */
+h2, h3 {
+    text-align: center;
+    color: black;
+    margin-top: 30px;
+}
+
+/* Link styling */
+a {
+    color: #1e90ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #ff6347;
+}
+
+/* List styling */
+.centered-list {
+    text-align: center;
+    list-style-position: inside;
+    font-size: 1.2rem;
+    padding-left: 0;
+}
+
+/* Emphasized text */
+.emphasizedText {
+    color: #d9534f;
+    font-weight: bold;
+}
+
+/* Section block using div */
+.section {
+    padding: 40px 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Flexbox card layout for images */
+.card {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.card img {
+    width: 300px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Center the YouTube video */
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+/* Remove the green box (highlight box) completely */
+.highlight {
+    background-color: transparent; /* Ensure it's transparent */
+    padding: 0; /* No padding */
+    margin: 0; /* No margin */
+    font-style: normal; /* Remove italics if unnecessary */
+}
+
+/* Styling for paragraphs */
+.section p {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+/* "Go to the top of the page" link styling */
+.go-to-top {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #1e90ff;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover effect for the "Go to the top" link */
+.go-to-top:hover {
+    background-color: #ff6347;
+    color: white;
+}
+
+/* Footer styling adjustments */
+footer {
+    margin-top: 20px; /* Add some space above the footer */
+}
+
+/* Ensure the "Go to the top" link is placed correctly within the layout */
+.section .go-to-top {
+    display: block;
+    text-align: center; /* Center the link horizontally */
+    margin-top: 20px; /* Add space above it */
+}
+
+
+/* Footer styles */
+footer {
+    background-color: #f8f9fa; /* Light background color */
+    padding: 40px 0;
+    margin-top: 40px; /* Space between footer and content */
+    border-top: 2px solid #ddd; /* A subtle border on top */
+}
+
+/* Style for the social media icons list */
+footer .list-inline {
+    display: flex;
+    justify-content: center; /* Center the icons */
+    align-items: center;
+    gap: 20px; /* Space between icons */
+    padding: 0;
+    margin: 0;
+}
+
+footer .list-inline-item {
+    list-style: none; /* Remove default list styling */
+}
+
+/* Style the icons */
+footer .fa-stack {
+    font-size: 1.5rem; /* Reduce the icon size */
+    transition: transform 0.3s ease; /* Add smooth hover effect */
+}
+
+/* Hover effect on icons */
+footer .list-inline-item a:hover .fa-stack {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Footer text */
+footer .small {
+    font-size: 0.9rem;
+    color: #6c757d; /* Subtle text color */
+    margin-top: 10px;
+}
+
+.section {
+    padding: 40px 20px;
+    margin: 20px auto;
+    max-width: 1000px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
