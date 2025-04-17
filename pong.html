@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pong Game</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 20px;
+    }
+
+    canvas {
+      border: 2px solid white;
+      background-color: #000;
+    }
+
+    p {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .menu {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .menu button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #ff6347;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .menu button:hover {
+      background-color: #ff4500;
+    }
+
+    /* Back to Menu Button */
+    .back-to-menu, .back-to-scratch {
+      position: absolute;
+      top: 20px;
+      padding: 10px 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    /* Hover effect for Back to Menu Button */
+    .back-to-menu:hover, .back-to-scratch:hover {
+      background-color: #ff6347;
+    }
+
+    /* Back to Scratch Page Button (top left) */
+    .back-to-scratch {
+      left: 20px;
+    }
+
+    /* Back to Menu Button (top right) */
+    .back-to-menu {
+      right: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Classic Pong</h1>
+
+  <!-- Game Mode Menu -->
+  <div id="menu" class="menu">
+    <button onclick="startGame(1)">Play 1 Player (vs AI)</button>
+    <button onclick="startGame(2)">Play 2 Players</button>
+  </div>
+
+  <!-- Back to Scratch Page Button -->
+  <a href="scratch.html" class="back-to-scratch">Back to Scratch Page</a>
+
+  <!-- Back to Menu Button -->
+  <a href="#" id="backToMenuBtn" class="back-to-menu" style="display: none;" onclick="backToMenu()">Back to Menu</a>
+
+  <!-- Pong Game Canvas -->
+  <canvas id="pong" width="600" height="400"></canvas>
+
+  <p>Use W/S to move Left Paddle | Up/Down Arrows for Right Paddle</p>
+
+  <script>
+    const canvas = document.getElementById("pong");
+    const ctx = canvas.getContext("2d");
+
+    const paddleWidth = 10, paddleHeight = 100, ballSize = 10;
+    const paddleSpeed = 8;
+    const ballSpeed = 3; // Slower ball speed
+
+    const player = { x: 0, y: canvas.height / 2 - paddleHeight / 2, score: 0 };
+    const ai = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, score: 0 };
+    const ball = { x: canvas.width / 2, y: canvas.height / 2, vx: 0, vy: 0 }; // Initial velocity 0
+
+    let gameMode = 0; // 0: No game, 1: 1 Player, 2: 2 Player
+    let keys = {};
+
+    // Menu and game setup
+    function startGame(mode) {
+      gameMode = mode;
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("backToMenuBtn").style.display = "block"; // Show "Back to Menu" button
+      ball.vx = ballSpeed * (Math.random() > 0.5 ? 1 : -1); // Random direction
+      ball.vy = ballSpeed * (Math.random() > 0.5 ? 1 : -1); // Random direction
+      loop();
+    }
+
+    function backToMenu() {
+      gameMode = 0;
+      player.score = 0;
+      ai.score = 0;
+      ball.x = canvas.width / 2;
+      ball.y = canvas.height / 2;
+      ball.vx = 0;
+      ball.vy = 0;
+      document.getElementById("menu").style.display = "block";
+      document.getElementById("backToMenuBtn").style.display = "none"; // Hide "Back to Menu" button
+    }
+
+    document.addEventListener("keydown", (e) => {
+      keys[e.key] = true;
+    });
+
+    document.addEventListener("keyup", (e) => {
+      keys[e.key] = false;
+    });
+
+    function drawRect(x, y, w, h, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, w, h);
+    }
+
+    function drawCircle(x, y, r, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function resetBall() {
+      ball.x = canvas.width / 2;
+      ball.y = canvas.height / 2;
+      ball.vx = ballSpeed * (Math.random() > 0.5 ? 1 : -1);
+      ball.vy = ballSpeed * (Math.random() > 0.5 ? 1 : -1);
+    }
+
+    function update() {
+      // Paddle movement (only for 2 Player mode)
+      if (gameMode === 2) {
+        if (keys["w"]) player.y -= paddleSpeed;
+        if (keys["s"]) player.y += paddleSpeed;
+        if (keys["ArrowUp"]) ai.y -= paddleSpeed;
+        if (keys["ArrowDown"]) ai.y += paddleSpeed;
+      }
+
+      // AI movement for 1 Player mode with randomness
+      if (gameMode === 1) {
+        if (keys["w"]) player.y -= paddleSpeed; // Left paddle movement
+        if (keys["s"]) player.y += paddleSpeed; // Left paddle movement
+
+        // AI movement with randomness
+        let center = ai.y + paddleHeight / 2;
+        let ballCenter = ball.y;
+        let moveDirection = ballCenter - center;
+
+        // AI can miss by a random factor
+        if (Math.abs(moveDirection) > paddleSpeed) {
+          ai.y += moveDirection * 0.05; // AI follows, but slower
+        } else {
+          ai.y += moveDirection * 0.1 + (Math.random() * 2 - 1) * 2; // Randomness added here
+        }
+      }
+
+      // Clamp paddles
+      player.y = Math.max(0, Math.min(canvas.height - paddleHeight, player.y));
+      ai.y = Math.max(0, Math.min(canvas.height - paddleHeight, ai.y));
+
+      // Ball movement
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      // Wall bounce
+      if (ball.y <= 0 || ball.y + ballSize >= canvas.height) ball.vy = -ball.vy;
+
+      // Paddle collision
+      if (
+        ball.x <= paddleWidth &&
+        ball.y > player.y &&
+        ball.y < player.y + paddleHeight
+      ) {
+        ball.vx = -ball.vx;
+      }
+
+      if (
+        ball.x + ballSize >= canvas.width - paddleWidth &&
+        ball.y > ai.y &&
+        ball.y < ai.y + paddleHeight
+      ) {
+        ball.vx = -ball.vx;
+      }
+
+      // Score
+      if (ball.x <= 0) {
+        ai.score++;
+        resetBall();
+      }
+
+      if (ball.x + ballSize >= canvas.width) {
+        player.score++;
+        resetBall();
+      }
+    }
+
+    function draw() {
+      drawRect(0, 0, canvas.width, canvas.height, "#000");
+      drawRect(player.x, player.y, paddleWidth, paddleHeight, "#fff");
+      drawRect(ai.x, ai.y, paddleWidth, paddleHeight, "#fff");
+      drawCircle(ball.x, ball.y, ballSize, "#fff");
+
+      ctx.font = "32px Arial";
+      ctx.fillText(player.score, canvas.width / 4, 40);
+      ctx.fillText(ai.score, (canvas.width / 4) * 3, 40);
+    }
+
+    function loop() {
+      update();
+      draw();
+      requestAnimationFrame(loop);
+    }
+  </script>
+</body>
+</html>
